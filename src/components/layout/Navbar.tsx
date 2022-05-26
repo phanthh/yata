@@ -1,4 +1,7 @@
+import useTodos from "../todo/lib/hook";
+
 export default function Navbar() {
+  const { todos } = useTodos();
   return (
     <div className="rounded border-2 border-gray-200 w-full">
       <h1 className="text-3xl font-bold text-center">YATA</h1>
@@ -19,6 +22,11 @@ export default function Navbar() {
           phanthh.github.io
         </a>
       </div>
+      <h4 className="text-sm text-center">
+        {todos.length > 0
+          ? `You have ${todos.length} todos today!`
+          : "Congrats! You are done for today!"}
+      </h4>
     </div>
   );
 }

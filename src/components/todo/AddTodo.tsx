@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { Todo } from "../lib/types";
+import useTodos from "./lib/hook";
 
 type FormState = {
   title: string;
   content: string;
 };
 
-export default function AddTodo({
-  addTodo,
-}: {
-  addTodo: (title: string, content: string) => void;
-}) {
+export default function AddTodo() {
+  const { postTodo } = useTodos();
   const [active, setActive] = useState(false);
   const [state, setState] = useState<FormState>({ title: "", content: "" });
   return (
@@ -42,7 +39,7 @@ export default function AddTodo({
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
-                addTodo(state.title, state.content);
+                postTodo(state.title, state.content);
                 setState({ title: "", content: "" });
               }}
               className="mr-2 p-1 shadow-md bg-green-200 rounded hover:bg-green-300 active:bg-green-400"

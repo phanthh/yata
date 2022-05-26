@@ -1,15 +1,9 @@
-import { Todo } from "../lib/types";
 import { useState } from "react";
+import { Todo } from "../../lib/types";
+import useTodos from "./lib/hook";
 
-export default function TodoBlock({
-  todo,
-  deleteTodo,
-  updateTodo,
-}: {
-  todo: Todo;
-  deleteTodo: (id: string) => void;
-  updateTodo: (id: string, newTodo: Todo) => void;
-}) {
+export default function TodoBlock({ todo }: { todo: Todo }) {
+  const { updateTodo, deleteTodo } = useTodos();
   const [edit, setEdit] = useState(false);
   const [newTodo, setNewTodo] = useState(todo);
   const { title, createdAt, author, content } = todo;
@@ -22,6 +16,7 @@ export default function TodoBlock({
       {edit ? (
         <h1
           className="text-xl font-bold w-fit border-2 border-green-200 border-dashed rounded px-2"
+          suppressContentEditableWarning={true}
           contentEditable={true}
           onBlur={(e) => {
             setNewTodo({
@@ -46,6 +41,7 @@ export default function TodoBlock({
               content: e.currentTarget.innerHTML as string,
             });
           }}
+          suppressContentEditableWarning={true}
           contentEditable={true}
           className="w-full h-full overflow-hidden resize-y border-2 border-green-200 border-dashed rounded px-2"
         >
@@ -84,7 +80,10 @@ export default function TodoBlock({
               Edit
             </button>
             <button
-              onClick={() => deleteTodo(todo.id)}
+              onClick={() => {
+                window.confirm("Are you sure you want to delete this todo ?") &&
+                  deleteTodo(todo.id);
+              }}
               className="p-1 shadow-md bg-red-200 rounded hover:bg-red-300 active:bg-red-400"
             >
               Delete
